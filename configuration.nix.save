@@ -107,47 +107,13 @@
     zsh
 
     libGL
-    electron
   ];
 
-# --- nix-ld configuration ---
+  # --- nix-ld configuration ---
 programs.nix-ld.enable = true;
-programs.nix-ld.libraries = with pkgs; [
-  # Core system
-  stdenv.cc.cc
-  glib
-  atk
-  at-spi2-atk
-  cairo
-  gtk3
-  pango
-  nspr
-  nss
-  dbus
-  cups
-  alsa-lib
-  expat
-  udev
-
-  # X11 libraries
-  xorg.libX11
-  xorg.libXcomposite
-  xorg.libXdamage
-  xorg.libXext
-  xorg.libXfixes
-  xorg.libXrandr
-  xorg.libxcb
-  libxkbcommon
-
-  # Mesa / OpenGL
-  mesa
-  libgbm
-
-  # Optional utilities
-  zlib
-  libuuid
+  pipewire
 ];
 
-
+  
   system.stateVersion = "23.11"; # Note: Corrected from "25.05"
 }
