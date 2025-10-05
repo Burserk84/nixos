@@ -4,6 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
+      <home-manager/nixos>
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -45,6 +46,26 @@
     shell = pkgs.zsh;
     packages = with pkgs; [ ];
   };
+
+  # --- Key Binding Setting ---
+  home-manager.users.user = { pkgs, ... }: {
+  home.stateVersion = "23.11";
+
+  dconf.settings = {
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      custom-keybindings = [
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+      ];
+    };
+
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+        name = "Lock Screen";
+        command = "loginctl lock-session";
+        binding = "<Super>l";
+      };
+    };
+  };
+
 
   # --- ZSH MODULE & POWERLEVEL10K CONFIGURATION ---
   programs.zsh = {
