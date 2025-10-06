@@ -124,6 +124,7 @@
     evince
     pkgs.gnome-tweaks
     steam-run
+    libreoffice-fresh
 
     zsh
 
