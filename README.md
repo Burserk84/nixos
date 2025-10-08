@@ -147,8 +147,3 @@ If not specified, it’s assumed to be **personal use only**.
 * [NixOS](https://nixos.org/) — for the declarative, reliable system architecture
 * [Home Manager](https://github.com/nix-community/home-manager) — for user environment management
 * The NixOS community — for extensive documentation and helpful modules
-
----
-
-Would you like me to add a **“Features”** section (listing your enabled services and key packages, like ExpressVPN, Docker, etc.)?
-I can extract that from your `configuration.nix` to make the README more descriptive.
