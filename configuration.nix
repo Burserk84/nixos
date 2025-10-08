@@ -95,6 +95,8 @@
   services.expressvpn.enable = true;
   services.dbus.packages = with pkgs; [ expressvpn ];
   services.postgresql.enable = true;
+  
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   programs.firefox.enable = true;
 
@@ -125,11 +127,28 @@
     pkgs.gnome-tweaks
     steam-run
     libreoffice-fresh
-
+    spotify-player
     zsh
 
     libGL
     electron
+    
+    # support both 32-bit and 64-bit applications
+    wineWowPackages.stable
+
+    # support 32-bit only
+    wine
+
+    # support 64-bit only
+    (wine.override { wineBuild = "wine64"; })
+
+    # support 64-bit only
+    wine64
+
+    # winetricks (all versions)
+    winetricks
+  
+    bottles
   ];
 
 # --- nix-ld configuration ---
