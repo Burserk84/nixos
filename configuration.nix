@@ -3,7 +3,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    <home-manager/nixos>
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -90,10 +89,13 @@
   services.expressvpn.enable = true;
   services.dbus.packages = with pkgs; [ expressvpn ];
 
-  services.postgresql.enable = true;
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_17;
+    dataDir = "/var/lib/postgresql/17";
+  };
 
-  # SSH: فقط برای اتصالِ بیرون (کلاینت کافی است).
-  # اگر خواستی سرور SSH هم داشته باشی، خط زیر را آن‌کامنت کن:
+  # SSH: configuration to connect with client to server
   # services.openssh.enable = true;
 
   # --- Nix / Nixpkgs ---
@@ -104,10 +106,10 @@
 
   # --- SYSTEM PACKAGES ---
   environment.systemPackages = with pkgs; [
-    # ظاهر/شِل
+    # zsh visual
     zsh-powerlevel10k
 
-    # Dev / اصلی‌های قبلی
+    # Dev packages
     git
     nodejs_20
     yarn
@@ -128,12 +130,12 @@
     libGL
     electron
 
-    # Wine (یک‌بار کافی است؛ 32/64 بیت)
+    # Wine
     wineWowPackages.stable
     winetricks
     bottles
 
-    # --- ابزارهای کاربردی CLI ---
+    # --- CLI ---
     vim
     gzip unzip zip p7zip
     curl wget rsync openssh gnupg
@@ -144,7 +146,7 @@
     docker-compose
     pkg-config gcc
 
-    # GStreamer codecs (برای ویدیو/صوت در GNOME)
+    # GStreamer codecs (for video/audio in GNOME)
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -152,12 +154,9 @@
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
 
-    # فونت‌ها (پکیج‌ها اینجا هم می‌آیند تا دسترسی سیستمی داشته باشند)
-    noto-fonts noto-fonts-cjk-sans noto-fonts-emoji
-    # font-awesome roboto fira-code
   ];
 
-  # فونت‌ها
+  # fonts
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans
