@@ -60,7 +60,7 @@ By version-controlling my NixOS setup, I can:
    sudo rm -rf /etc/nixos
    sudo git clone https://github.com/Burserk84/nixos.git /etc/nixos
    cd /etc/nixos
-````
+   ```
 
 2. (Optional) Adjust values such as username, hostname, or GPU driver.
 
