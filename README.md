@@ -1,73 +1,83 @@
+---
+
+````markdown
 # 🧊 NixOS Configuration — amiralidev
 
-This repository contains the full declarative configuration for my **NixOS 25.05 (Warbler)** system running **GNOME on Wayland**.
-It defines everything — from packages and services to users, networking, and desktop environment — so I can rebuild my entire system from scratch with one command.
+This repository contains the complete declarative setup for my **NixOS 25.05 (Warbler)** system running **GNOME on Wayland**.  
+It defines everything — from packages and kernel parameters to TLP, thermals, and Chrome GPU acceleration — allowing me to rebuild my full dev environment from scratch with one command.
 
 ---
 
 ## 📘 Overview
 
-This setup is built for **reproducibility** and **clarity**.
-By version-controlling my NixOS configuration, I can:
+This configuration is designed for **clarity**, **performance**, and **reproducibility**.  
+By version-controlling my NixOS setup, I can:
 
 * Reinstall or migrate my system in minutes
-* Keep track of every change via Git
-* Roll back instantly to previous configurations
-* Maintain a clean, consistent development environment
+* Track all system changes via Git
+* Roll back to any previous configuration instantly
+* Keep a clean and predictable development environment
 
-> ⚠️ Note: This configuration is tailored for my personal machine (`amiralidev`).
-> Others may need to adjust settings (especially hardware-related parts) before use.
+> ⚠️ Note:  
+> This setup is tailored to my personal laptop (`amiralidev`, Intel i5-1335U + Iris Xe).  
+> Others may need to adjust hardware-specific or driver settings before using.
 
 ---
 
 ## 🧱 System Details
 
-| Component                 | Description                               |
-| ------------------------- | ----------------------------------------- |
-| **OS**                    | NixOS 25.05.810767 (Warbler)              |
-| **Desktop Environment**   | GNOME (Wayland)                           |
-| **Hostname**              | `amiralidev`                              |
-| **Package Manager**       | Nix                                       |
-| **Configuration Manager** | NixOS modules + (optionally) Home Manager |
+| Component | Description |
+| ---------- | ----------- |
+| **OS** | NixOS 25.05 (Warbler) |
+| **Desktop Environment** | GNOME (Wayland) |
+| **Hostname** | `amiralidev` |
+| **CPU** | Intel® Core™ i5-1335U (10C / 12T) |
+| **GPU** | Intel Iris Xe Graphics (VAAPI + ANGLE) |
+| **Display Stack** | Wayland + EGL + Mesa 25 |
+| **Package Manager** | Nix |
+| **Power Management** | TLP (balanced) + thermald + irqbalance |
+| **Shell** | Zsh + Oh-My-Zsh + Powerlevel10k |
+| **Browser** | Google Chrome (Wayland, full GPU acceleration) |
 
 ---
 
 ## 📂 Repository Structure
 
-| File                         | Description                                              |
-| ---------------------------- | -------------------------------------------------------- |
-| `configuration.nix`          | Main system configuration (packages, services, settings) |
-| `hardware-configuration.nix` | Auto-generated hardware config (disks, drivers, etc.)    |
-| `home.nix`                   | User configuration (dotfiles, environment, shell, etc.)  |
-| `configuration.nix.save`     | Backup of previous system configuration                  |
+| File | Description |
+| ---- | ------------ |
+| `flake.nix` | Flake entrypoint — defines system + inputs |
+| `configuration.nix` | Main system configuration |
+| `hardware-configuration.nix` | Auto-generated hardware setup |
+| `home.nix` | User environment (via Home Manager) |
+| `configuration.nix.save` | Backup of previous configuration |
 
 ---
 
 ## ⚙️ Installation & Usage
 
-1. Clone this repository into `/etc/nixos`:
+1. Clone this repo into `/etc/nixos`:
 
    ```bash
    sudo rm -rf /etc/nixos
    sudo git clone https://github.com/Burserk84/nixos.git /etc/nixos
    cd /etc/nixos
-   ```
+````
 
-2. (Optional) Adjust configuration values — e.g. username, packages, or host-specific settings.
+2. (Optional) Adjust values such as username, hostname, or GPU driver.
 
-3. Apply the configuration:
+3. Rebuild the system:
 
    ```bash
-   sudo nixos-rebuild switch
+   sudo nixos-rebuild switch --flake '.#amiralidev'
    ```
 
-4. Reboot if necessary:
+4. Reboot if needed:
 
    ```bash
    sudo reboot
    ```
 
-5. If using Home Manager, apply user configs with:
+5. (Optional) Apply Home Manager configs:
 
    ```bash
    home-manager switch
@@ -75,75 +85,109 @@ By version-controlling my NixOS configuration, I can:
 
 ---
 
-## 🔧 Common Commands
+## 🧩 Key Features
 
-| Command                               | Purpose                                         |
-| ------------------------------------- | ----------------------------------------------- |
-| `sudo nixos-rebuild switch`           | Apply configuration immediately                 |
-| `sudo nixos-rebuild boot`             | Build configuration for next boot only          |
-| `sudo nixos-rebuild test`             | Test config without committing it               |
-| `sudo nixos-rebuild switch --upgrade` | Update system and switch                        |
-| `sudo nix-channel --update`           | Update NixOS channels                           |
-| `sudo nix-collect-garbage -d`         | Clean old generations and free space            |
-| `home-manager switch`                 | Update user environment (if using Home Manager) |
+✅ **Wayland-native GNOME** — smooth, low-latency experience
+✅ **Intel Xe acceleration** — via `intel-media-driver` + `mesa`
+✅ **Chrome GPU acceleration** — ANGLE over EGL + VAAPI decoding
+✅ **Balanced thermals** — TLP tuned for performance/cool operation
+✅ **Zsh + Powerlevel10k** — modern, fast shell experience
+✅ **Docker + PostgreSQL + NodeJS** — ready for full-stack dev
+✅ **zramSwap** — improved memory compression
+✅ **PipeWire audio** — clean audio stack with low latency
+✅ **Weekly fstrim** — SSD health maintenance
 
 ---
 
-## 🧩 Customization
+## 🔧 Common Commands
 
-You can easily customize:
-
-* **Packages** → via `environment.systemPackages`
-* **Services** → `services.<name>.enable = true;`
-* **Networking** → `networking.interfaces` and `networkmanager.enable`
-* **Desktop tweaks** → via GNOME and Wayland options
-* **User configs** → add dotfiles, aliases, and shells in `home.nix`
+| Command                                          | Description                |
+| ------------------------------------------------ | -------------------------- |
+| `sudo nixos-rebuild switch`                      | Apply config immediately   |
+| `sudo nixos-rebuild switch --flake .#amiralidev` | Apply via flake            |
+| `sudo nixos-rebuild boot`                        | Build config for next boot |
+| `sudo nixos-rebuild test`                        | Test config temporarily    |
+| `sudo nixos-rebuild switch --upgrade`            | Update & apply             |
+| `sudo nix-collect-garbage -d`                    | Remove old generations     |
+| `home-manager switch`                            | Apply user configs         |
 
 ---
 
 ## ♻️ Rollbacks & Recovery
 
-One of NixOS’s best features: instant rollbacks.
-You can revert to a previous working generation anytime:
+NixOS allows instant rollbacks to previous generations:
 
 ```bash
 sudo nixos-rebuild switch --rollback
 ```
 
-Or simply pick an older generation from the **bootloader menu** at startup.
+Or select an older generation from the **boot menu** at startup.
+
+---
+
+## 🧊 Performance & Thermal Tuning
+
+| Tool             | Role                                  |
+| ---------------- | ------------------------------------- |
+| **TLP**          | Power and governor management         |
+| **thermald**     | Dynamic CPU thermal tuning            |
+| **irqbalance**   | Evenly distribute interrupts          |
+| **zramSwap**     | Compress memory to avoid swap lag     |
+| **auto-trim**    | Weekly SSD TRIM                       |
+| **Chrome VAAPI** | Hardware video decoding via Intel iHD |
+
+> Typical temps during dev use: **55–65 °C**, short spikes under load are normal.
 
 ---
 
 ## 🩵 Troubleshooting
 
-* **See detailed rebuild logs:**
+**Rebuild with detailed trace:**
 
-  ```bash
-  sudo nixos-rebuild switch --show-trace
-  ```
-* **View recent system logs:**
+```bash
+sudo nixos-rebuild switch --show-trace
+```
 
-  ```bash
-  journalctl -xb
-  ```
-* **Check services:**
+**View system logs:**
 
-  ```bash
-  systemctl status <service-name>
-  ```
-* **Hardware issues:** verify entries in `hardware-configuration.nix`
+```bash
+journalctl -xb
+```
+
+**Check running services:**
+
+```bash
+systemctl status <service>
+```
+
+**Verify GPU acceleration:**
+
+```bash
+chrome://gpu
+vainfo | grep -E 'H264|HEVC|AV1'
+```
 
 ---
 
 ## 📜 License
 
-You can license this configuration under [MIT](https://opensource.org/licenses/MIT) or any other license you prefer.
-If not specified, it’s assumed to be **personal use only**.
+Licensed under the [MIT License](https://opensource.org/licenses/MIT).
+You may reuse or adapt parts of this configuration at your own discretion.
 
 ---
 
 ## 💡 Credits
 
-* [NixOS](https://nixos.org/) — for the declarative, reliable system architecture
-* [Home Manager](https://github.com/nix-community/home-manager) — for user environment management
-* The NixOS community — for extensive documentation and helpful modules
+* [NixOS](https://nixos.org/) — declarative OS magic
+* [Home Manager](https://github.com/nix-community/home-manager) — per-user config management
+* [TLP](https://linrunner.de/tlp/) — power optimization for Linux
+* [Mesa + Intel VAAPI](https://mesa3d.org/) — open-source graphics stack
+* The NixOS community ❤️ for documentation and guidance
+
+---
+
+> **Built with love, Zsh, and flakes — Amirali Sharifi Asl**
+
+```
+
+---
