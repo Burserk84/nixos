@@ -1,6 +1,5 @@
 ---
 
-````markdown
 # 🧊 NixOS Configuration — amiralidev
 
 This repository contains the complete declarative setup for my **NixOS 25.05 (Warbler)** system running **GNOME on Wayland**.  
@@ -185,9 +184,5 @@ You may reuse or adapt parts of this configuration at your own discretion.
 * The NixOS community ❤️ for documentation and guidance
 
 ---
-
 > **Built with love, Zsh, and flakes — Amirali Sharifi Asl**
-
-```
-
 ---
