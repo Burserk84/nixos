@@ -95,10 +95,10 @@
     pulse.enable = true;
   };
 
-  # Wayland + VAAPI hints for Chrome/Chromium
+  # Wayland + VAAPI hints for Chrome/Chromium + Gaming env
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";  # prefer Wayland for Chromium-based apps
-    LIBVA_DRIVER_NAME = "iHD"; # force Intel VAAPI driver
+    NIXOS_OZONE_WL = "1";        # prefer Wayland for Chromium-based apps
+    LIBVA_DRIVER_NAME = "iHD";   # force Intel VAAPI driver
   };
 
   # Enable setuid sandbox for Chrome (GPU/VAAPI stability)
@@ -161,6 +161,27 @@
     dataDir = "/var/lib/postgresql/17";
   };
 
+  # --- Gaming: GameMode, Steam, controller rules ---
+  programs.gamemode = {
+    enable = true;
+    settings = {
+      general = { renice = 10; softrealtime = "auto"; };
+      gpu = { apply_gpu_optimisations = "accept-responsibility"; gpu_device = 0; };
+    };
+  };
+
+  programs.steam = {
+    enable = true;
+    # If this errors on your channel, just remove it:
+    extraCompatPackages = [ pkgs.proton-ge-bin ];
+  };
+
+  # Controller support:
+  hardware.steam-hardware.enable = true;   # installs Steam’s udev rules
+  services.udev.packages = with pkgs; [
+    game-devices-udev-rules              # wide controller coverage
+  ];
+
   # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
@@ -175,7 +196,6 @@
 
     # dev
     git nodejs_20 yarn postgresql
-
     # apps
     google-chrome expressvpn tor-browser telegram-desktop vscode obsidian
     qbittorrent evince gnome-tweaks steam-run libreoffice-fresh spotify-player
@@ -183,6 +203,12 @@
 
     # wine
     wineWowPackages.stable winetricks bottles
+
+    # gaming platforms & tools
+    steam lutris heroic itch
+    mangohud gamescope gamemode protontricks vkbasalt goverlay
+
+    # controllers helpers already via udev rules above
 
     # cli
     vim gzip unzip zip p7zip curl wget rsync openssh gnupg
