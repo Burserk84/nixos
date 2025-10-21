@@ -196,10 +196,12 @@
 
     # dev
     git nodejs_20 yarn postgresql
+    
     # apps
     google-chrome expressvpn tor-browser telegram-desktop vscode obsidian
     qbittorrent evince gnome-tweaks steam-run libreoffice-fresh spotify-player
-    libGL electron obs-studio kdePackages.kdenlive ffmpeg-full rar
+    libGL electron obs-studio kdePackages.kdenlive ffmpeg-full rar hiddify-app
+    vlc
 
     # wine
     wineWowPackages.stable winetricks bottles
